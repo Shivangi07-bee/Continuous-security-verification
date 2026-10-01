@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Security Verification Command Center</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+
+<div class="scanline"></div>
+
+<header class="topbar">
+
+    <div class="brand">
+        <div class="brand-mark">
+            <span>◈</span>
+        </div>
+
+        <div>
+            <div class="brand-title">
+                SECURITY VERIFICATION
+            </div>
+
+            <div class="brand-subtitle">
+                CONTINUOUS SECURITY INTELLIGENCE
+            </div>
+        </div>
+    </div>
+
+    <div class="top-status">
+
+        <div class="status-item">
+            <span class="pulse"></span>
+            ENGINE ONLINE
+        </div>
+
+        <div class="status-item">
+            REPOSITORY
+            <strong>ONLINE-BOUTIQUE</strong>
+        </div>
+
+        <div class="status-item">
+            ENV
+            <strong>RESEARCH</strong>
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="dashboard">
+
+    <section class="hero">
+
+        <div>
+            <div class="eyebrow">
+                <span>01</span>
+                CONTINUOUS SECURITY VERIFICATION
+            </div>
+
+            <h1>
+                Evolving Microservice
+                <span>Security Intelligence</span>
+            </h1>
+
+            <p>
+                Repository-aware analysis of software evolution,
+                security impact and targeted verification.
+            </p>
+        </div>
+
+        <div class="system-core">
+
+            <div class="core-ring ring-one"></div>
+            <div class="core-ring ring-two"></div>
+            <div class="core-ring ring-three"></div>
+
+            <div class="core-center">
+                <span>SEC</span>
+                <strong>CORE</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="metrics">
+
+        <div class="metric-card">
+            <div class="metric-label">EXPERIMENTS</div>
+            <div class="metric-value" id="experimentCount">--</div>
+            <div class="metric-footer">CONTROLLED EVALUATIONS</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-label">PASS</div>
+            <div class="metric-value pass" id="passCount">--</div>
+            <div class="metric-footer">SECURITY RULES PRESERVED</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-label">FAIL</div>
+            <div class="metric-value fail" id="failCount">--</div>
+            <div class="metric-footer">REGRESSION DETECTED</div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-label">REVIEW</div>
+            <div class="metric-value review" id="reviewCount">--</div>
+            <div class="metric-footer">REQUIRES VALIDATION</div>
+        </div>
+
+    </section>
+
+
+    <section class="workspace">
+
+        <div class="panel pipeline-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-index">[01]</span>
+                    VERIFICATION PIPELINE
+                </div>
+
+                <span class="live-tag">LIVE</span>
+
+            </div>
+
+
+            <div class="pipeline">
+
+                <div class="pipeline-node active">
+                    <span class="node-number">01</span>
+                    <span>CHANGE<br>EXTRACTION</span>
+                </div>
+
+                <div class="connector"></div>
+
+                <div class="pipeline-node">
+                    <span class="node-number">02</span>
+                    <span>SEMANTIC<br>ANALYSIS</span>
+                </div>
+
+                <div class="connector"></div>
+
+                <div class="pipeline-node">
+                    <span class="node-number">03</span>
+                    <span>IMPACT<br>MAPPING</span>
+                </div>
+
+                <div class="connector"></div>
+
+                <div class="pipeline-node">
+                    <span class="node-number">04</span>
+                    <span>EVIDENCE<br>COLLECTION</span>
+                </div>
+
+                <div class="connector"></div>
+
+                <div class="pipeline-node final">
+                    <span class="node-number">05</span>
+                    <span>TARGETED<br>VERIFICATION</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="panel repository-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-index">[02]</span>
+                    SUBJECT SYSTEM
+                </div>
+
+                <span class="repo-state">
+                    ● TRACKED
+                </span>
+
+            </div>
+
+            <div class="repo-name">
+                GOOGLE ONLINE BOUTIQUE
+            </div>
+
+            <div class="repo-path">
+                GoogleCloudPlatform / microservices-demo
+            </div>
+
+            <div class="repo-stats">
+
+                <div>
+                    <span>ARCHITECTURE</span>
+                    <strong>MICROSERVICES</strong>
+                </div>
+
+                <div>
+                    <span>ANALYSIS MODE</span>
+                    <strong>EVOLUTION-AWARE</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="lower-grid">
+
+
+        <div class="panel experiments-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-index">[03]</span>
+                    EXPERIMENTAL EVIDENCE
+                </div>
+
+                <span class="data-tag">JSON / VERIFIED</span>
+
+            </div>
+
+            <div id="experiments" class="experiment-list">
+
+                <div class="loading">
+                    LOADING EXPERIMENTAL DATA...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="panel terminal-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-index">[04]</span>
+                    SECURITY EVENT STREAM
+                </div>
+
+                <span class="data-tag">ENGINE OUTPUT</span>
+
+            </div>
+
+            <div id="terminal" class="terminal">
+
+                <div>
+                    <span class="terminal-time">[SYSTEM]</span>
+                    Initializing security intelligence engine...
+                </div>
+
+                <div>
+                    <span class="terminal-time">[SYSTEM]</span>
+                    Loading repository context...
+                </div>
+
+                <div>
+                    <span class="terminal-time">[SYSTEM]</span>
+                    Awaiting experimental evidence...
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="impact-section">
+
+        <div class="panel impact-panel">
+
+            <div class="panel-header">
+
+                <div>
+                    <span class="panel-index">[05]</span>
+                    SECURITY ANALYSIS MODEL
+                </div>
+
+                <span class="data-tag">REPOSITORY → SECURITY</span>
+
+            </div>
+
+
+            <div class="impact-flow">
+
+                <div class="flow-block">
+                    <small>INPUT</small>
+                    <strong>CODE EVOLUTION</strong>
+                    <span>Git repository changes</span>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-block">
+                    <small>REASONING</small>
+                    <strong>SECURITY IMPACT</strong>
+                    <span>Semantic + relationship analysis</span>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-block">
+                    <small>VERIFICATION</small>
+                    <strong>SECURITY PROPERTY</strong>
+                    <span>Targeted security checking</span>
+                </div>
+
+                <div class="flow-arrow">→</div>
+
+                <div class="flow-block result-block">
+                    <small>OUTPUT</small>
+                    <strong>SECURITY DECISION</strong>
+                    <span>PASS / FAIL / REVIEW</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+
+        <div>
+            CONTINUOUS SECURITY VERIFICATION
+        </div>
+
+        <div>
+            RESEARCH PROTOTYPE // ONLINE BOUTIQUE
+        </div>
+
+        <div>
+            SYSTEM STATUS: <span>OPERATIONAL</span>
+        </div>
+
+    </footer>
+
+</main>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
