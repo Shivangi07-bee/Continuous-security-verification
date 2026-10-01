@@ -1,0 +1,262 @@
+{
+  "engine": "relationship-builder",
+  "version": "1.0",
+  "repository": "D:\\CyberSecurityProject\\microservices-demo",
+  "services_discovered": [
+    "adservice",
+    "cartservice",
+    "checkoutservice",
+    "currencyservice",
+    "emailservice",
+    "paymentservice",
+    "productcatalogservice",
+    "recommendationservice",
+    "shippingservice",
+    "shoppingassistantservice"
+  ],
+  "total_relationships": 40,
+  "affected_services": [],
+  "impacted_relationships": [],
+  "relationships": [
+    {
+      "source_service": "emailservice",
+      "target_service": "adservice",
+      "evidence_file": "emailservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "emailservice",
+      "target_service": "shippingservice",
+      "evidence_file": "emailservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "emailservice",
+      "target_service": "productcatalogservice",
+      "evidence_file": "emailservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "emailservice",
+      "target_service": "recommendationservice",
+      "evidence_file": "emailservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "emailservice",
+      "target_service": "cartservice",
+      "evidence_file": "emailservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "emailservice",
+      "target_service": "paymentservice",
+      "evidence_file": "emailservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "emailservice",
+      "target_service": "checkoutservice",
+      "evidence_file": "emailservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "emailservice",
+      "target_service": "currencyservice",
+      "evidence_file": "emailservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "recommendationservice",
+      "target_service": "adservice",
+      "evidence_file": "recommendationservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "recommendationservice",
+      "target_service": "shippingservice",
+      "evidence_file": "recommendationservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "recommendationservice",
+      "target_service": "productcatalogservice",
+      "evidence_file": "recommendationservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "recommendationservice",
+      "target_service": "cartservice",
+      "evidence_file": "recommendationservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "recommendationservice",
+      "target_service": "paymentservice",
+      "evidence_file": "recommendationservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "recommendationservice",
+      "target_service": "emailservice",
+      "evidence_file": "recommendationservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "recommendationservice",
+      "target_service": "checkoutservice",
+      "evidence_file": "recommendationservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "recommendationservice",
+      "target_service": "currencyservice",
+      "evidence_file": "recommendationservice\\demo_pb2_grpc.py",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "paymentservice",
+      "target_service": "adservice",
+      "evidence_file": "paymentservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "paymentservice",
+      "target_service": "shippingservice",
+      "evidence_file": "paymentservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "paymentservice",
+      "target_service": "productcatalogservice",
+      "evidence_file": "paymentservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "paymentservice",
+      "target_service": "recommendationservice",
+      "evidence_file": "paymentservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "paymentservice",
+      "target_service": "cartservice",
+      "evidence_file": "paymentservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "paymentservice",
+      "target_service": "emailservice",
+      "evidence_file": "paymentservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "paymentservice",
+      "target_service": "checkoutservice",
+      "evidence_file": "paymentservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "paymentservice",
+      "target_service": "currencyservice",
+      "evidence_file": "paymentservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "currencyservice",
+      "target_service": "adservice",
+      "evidence_file": "currencyservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "currencyservice",
+      "target_service": "shippingservice",
+      "evidence_file": "currencyservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "currencyservice",
+      "target_service": "productcatalogservice",
+      "evidence_file": "currencyservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "currencyservice",
+      "target_service": "recommendationservice",
+      "evidence_file": "currencyservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "currencyservice",
+      "target_service": "cartservice",
+      "evidence_file": "currencyservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "currencyservice",
+      "target_service": "paymentservice",
+      "evidence_file": "currencyservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "currencyservice",
+      "target_service": "emailservice",
+      "evidence_file": "currencyservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "currencyservice",
+      "target_service": "checkoutservice",
+      "evidence_file": "currencyservice\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "adservice",
+      "target_service": "shippingservice",
+      "evidence_file": "adservice\\src\\main\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "adservice",
+      "target_service": "productcatalogservice",
+      "evidence_file": "adservice\\src\\main\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "adservice",
+      "target_service": "recommendationservice",
+      "evidence_file": "adservice\\src\\main\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "adservice",
+      "target_service": "cartservice",
+      "evidence_file": "adservice\\src\\main\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "adservice",
+      "target_service": "paymentservice",
+      "evidence_file": "adservice\\src\\main\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "adservice",
+      "target_service": "emailservice",
+      "evidence_file": "adservice\\src\\main\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "adservice",
+      "target_service": "checkoutservice",
+      "evidence_file": "adservice\\src\\main\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    },
+    {
+      "source_service": "adservice",
+      "target_service": "currencyservice",
+      "evidence_file": "adservice\\src\\main\\proto\\demo.proto",
+      "relationship_type": "service_reference"
+    }
+  ]
+}

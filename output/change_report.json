@@ -1,0 +1,23 @@
+{
+  "engine": "change-extraction-engine",
+  "version": "1.0",
+  "repository": "D:\\CyberSecurityProject\\microservices-demo",
+  "base_commit": "HEAD~1",
+  "head_commit": "HEAD",
+  "changed_files": 1,
+  "affected_services": [],
+  "changes": [
+    {
+      "status": "M",
+      "change_type": "modified",
+      "path": "README.md",
+      "old_path": null,
+      "service": null,
+      "artifact_type": "other",
+      "lines_added": 2,
+      "lines_removed": 0,
+      "symbols_touched": [],
+      "potential_impact_domains": []
+    }
+  ]
+}

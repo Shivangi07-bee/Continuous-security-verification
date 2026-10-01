@@ -1,0 +1,34 @@
+{
+  "payment_transaction_integrity": {
+    "description": "Payment processing must preserve transaction integrity.",
+    "affected_services": [
+      "paymentservice",
+      "checkoutservice"
+    ],
+    "verification_type": "transaction_flow"
+  },
+  "service_interaction_integrity": {
+    "description": "Service-to-service interactions must remain within expected relationships.",
+    "affected_services": [
+      "paymentservice",
+      "checkoutservice",
+      "adservice",
+      "frontend"
+    ],
+    "verification_type": "service_relationship"
+  },
+  "interface_contract_integrity": {
+    "description": "Service interfaces must remain compatible after changes.",
+    "affected_services": [
+      "paymentservice",
+      "checkoutservice",
+      "currencyservice"
+    ],
+    "verification_type": "interface_contract"
+  },
+  "deployment_integrity": {
+    "description": "Security-relevant deployment relationships must remain valid.",
+    "affected_services": [],
+    "verification_type": "deployment"
+  }
+}
