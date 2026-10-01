@@ -1,0 +1,53 @@
+{
+  "engine": "evidence-aware-targeted-verifier",
+  "version": "2.1",
+  "total_checks": 4,
+  "passed": 0,
+  "review_required": 4,
+  "results": [
+    {
+      "service": "paymentservice",
+      "file": "src/paymentservice/proto/demo.proto",
+      "security_property": "service_contract_integrity",
+      "severity": "high",
+      "verification_strategy": "interface_compatibility",
+      "verification": {
+        "status": "REVIEW",
+        "reason": "Security property was affected, but no matching repository evidence was available."
+      }
+    },
+    {
+      "service": "paymentservice",
+      "file": "src/paymentservice/server.js",
+      "security_property": "payment_transaction_integrity",
+      "severity": "high",
+      "verification_strategy": "transaction_state_consistency",
+      "verification": {
+        "status": "REVIEW",
+        "reason": "Security property was affected, but no matching repository evidence was available."
+      }
+    },
+    {
+      "service": "paymentservice",
+      "file": "src/paymentservice/server.js",
+      "security_property": "payment_authorization",
+      "severity": "critical",
+      "verification_strategy": "authorization_precondition",
+      "verification": {
+        "status": "REVIEW",
+        "reason": "Authorization-sensitive change detected; manual security validation is required."
+      }
+    },
+    {
+      "service": "paymentservice",
+      "file": "src/paymentservice/server.js",
+      "security_property": "service_interaction_integrity",
+      "severity": "high",
+      "verification_strategy": "interaction_contract_consistency",
+      "verification": {
+        "status": "REVIEW",
+        "reason": "Security property was affected, but no matching repository evidence was available."
+      }
+    }
+  ]
+}

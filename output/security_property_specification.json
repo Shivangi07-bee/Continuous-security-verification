@@ -1,0 +1,51 @@
+{
+  "engine": "security-property-model",
+  "version": "1.0",
+  "specifications": [
+    {
+      "service": "paymentservice",
+      "file": "src/paymentservice/proto/demo.proto",
+      "security_property": "service_contract_integrity",
+      "category": "interface",
+      "invariant": "Changes to an exposed service contract must remain compatible with its dependent service interactions.",
+      "verification_strategy": "interface_compatibility",
+      "severity": "high",
+      "impact_source": "interface_change",
+      "verification_required": true
+    },
+    {
+      "service": "paymentservice",
+      "file": "src/paymentservice/server.js",
+      "security_property": "payment_transaction_integrity",
+      "category": "transaction",
+      "invariant": "A payment transaction must preserve its amount, payment identity, and transaction state across service interactions.",
+      "verification_strategy": "transaction_state_consistency",
+      "severity": "high",
+      "impact_source": "service_change",
+      "verification_required": true
+    },
+    {
+      "service": "paymentservice",
+      "file": "src/paymentservice/server.js",
+      "security_property": "payment_authorization",
+      "category": "authorization",
+      "invariant": "A payment operation must only be accepted when the required authorization context is valid.",
+      "verification_strategy": "authorization_precondition",
+      "severity": "critical",
+      "impact_source": "service_change",
+      "verification_required": true
+    },
+    {
+      "service": "paymentservice",
+      "file": "src/paymentservice/server.js",
+      "security_property": "service_interaction_integrity",
+      "category": "service_interaction",
+      "invariant": "A service interaction must preserve the expected contract and security assumptions between communicating services.",
+      "verification_strategy": "interaction_contract_consistency",
+      "severity": "high",
+      "impact_source": "relationship",
+      "verification_required": true
+    }
+  ],
+  "total_properties": 4
+}

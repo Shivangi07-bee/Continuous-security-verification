@@ -1,0 +1,9 @@
+{
+  "engine": "security-rule-verifier",
+  "version": "1.2",
+  "total_checks": 0,
+  "passed": 0,
+  "failed": 0,
+  "review_required": 0,
+  "results": []
+}

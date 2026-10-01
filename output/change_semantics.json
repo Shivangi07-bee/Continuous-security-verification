@@ -1,0 +1,15 @@
+{
+  "engine": "change-semantics-analyzer",
+  "version": "1.0",
+  "repository": "D:\\CyberSecurityProject\\microservices-demo",
+  "base_commit": "HEAD~1",
+  "head_commit": "HEAD",
+  "analyses": [
+    {
+      "path": "README.md",
+      "lines_added": 2,
+      "lines_removed": 0,
+      "semantic_signals": []
+    }
+  ]
+}

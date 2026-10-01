@@ -1,0 +1,47 @@
+{
+  "experiment_set": "Microservice Security Evolution Evaluation",
+  "subject_system": "Google Online Boutique",
+  "repository": "GoogleCloudPlatform/microservices-demo",
+  "experiments": [
+    {
+      "id": "E1",
+      "change_type": "Authorization",
+      "commit": "616368f",
+      "change": "Authorization condition changed from > 0 to >= 0",
+      "security_property": "payment_authorization",
+      "expected_behavior": "Detect security regression",
+      "observed_result": "FAIL",
+      "interpretation": "The framework detected that the authorization condition was weakened."
+    },
+    {
+      "id": "E2",
+      "change_type": "Transaction",
+      "commit": "8af0ef3",
+      "change": "Added transaction amount validation using Number.isFinite",
+      "security_property": "payment_transaction_integrity",
+      "expected_behavior": "Verify transaction integrity rule",
+      "observed_result": "PASS",
+      "interpretation": "The framework detected and verified the added transaction validation rule."
+    },
+    {
+      "id": "E3",
+      "change_type": "API Contract",
+      "commit": "fcf2781",
+      "change": "Added client_reference field to ChargeRequest protobuf contract",
+      "security_property": "service_contract_integrity",
+      "expected_behavior": "Detect affected API contract and require verification",
+      "observed_result": "REVIEW",
+      "interpretation": "The framework detected the interface change and identified a security-relevant contract impact requiring further validation."
+    },
+    {
+      "id": "E4",
+      "change_type": "Unrelated",
+      "commit": "c5135fa",
+      "change": "Documentation-only README modification",
+      "security_property": "none",
+      "expected_behavior": "Do not target security verification",
+      "observed_result": "NOT_TARGETED",
+      "interpretation": "The framework correctly produced zero security-rule checks for the unrelated documentation change."
+    }
+  ]
+}
