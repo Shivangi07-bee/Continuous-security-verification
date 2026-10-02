@@ -1,44 +1,120 @@
+import argparse
 import json
 from pathlib import Path
 
-from security_properties import get_properties_for_services
+
+def load_json(path):
+    return json.loads(
+        Path(path).read_text(encoding="utf-8")
+    )
 
 
 def select_properties(impact_report):
-    services = set()
+    properties = []
 
-    for impact in impact_report.get("security_impacts", []):
-        service = impact.get("service")
-        if service:
-            services.add(service)
+    for impact in impact_report.get(
+        "security_impacts",
+        []
+    ):
+        properties.append({
+            "service": impact.get("service"),
+            "file": impact.get("file"),
+            "security_property": impact.get(
+                "security_property",
+                "unknown_property"
+            ),
+            "severity": impact.get(
+                "severity",
+                "medium"
+            ),
+            "category": impact.get(
+                "category",
+                "security"
+            ),
+            "verification_strategy": impact.get(
+                "verification_strategy",
+                "targeted_repository_verification"
+            ),
+            "reason": impact.get(
+                "reason",
+                ""
+            ),
+            "verification_required": impact.get(
+                "verification_required",
+                True
+            ),
+        })
 
-    properties = get_properties_for_services(services)
+    unique = {}
 
-    return {
-        "services_analyzed": sorted(services),
-        "selected_properties": properties,
-        "total_properties": len(properties),
-    }
+    for item in properties:
+        key = (
+            item["service"],
+            item["file"],
+            item["security_property"],
+        )
+        unique[key] = item
+
+    return list(unique.values())
 
 
 def main():
-    input_file = Path("output/security_impact_report.json")
-    output_file = Path("output/selected_security_properties.json")
-
-    report = json.loads(input_file.read_text(encoding="utf-8"))
-
-    result = select_properties(report)
-
-    output_file.write_text(
-        json.dumps(result, indent=2),
-        encoding="utf-8",
+    parser = argparse.ArgumentParser(
+        description="Security property selector"
     )
 
-    print(json.dumps({
-        "status": "success",
-        "selected_properties": result["total_properties"],
-        "output": str(output_file.resolve()),
-    }, indent=2))
+    parser.add_argument(
+        "--impact-report",
+        required=True,
+    )
+
+    parser.add_argument(
+        "--output",
+        default="output/security_property_specification.json",
+    )
+
+    args = parser.parse_args()
+
+    impact_report = load_json(
+        args.impact_report
+    )
+
+    properties = select_properties(
+        impact_report
+    )
+
+    result = {
+        "engine": "security-property-selector",
+        "version": "1.1",
+        "security_properties": properties,
+        "total_properties": len(properties),
+    }
+
+    output = Path(args.output)
+
+    output.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    output.write_text(
+        json.dumps(
+            result,
+            indent=2
+        ),
+        encoding="utf-8"
+    )
+
+    print(
+        json.dumps(
+            {
+                "status": "success",
+                "security_properties": len(properties),
+                "output": str(output.resolve()),
+            },
+            indent=2
+        )
+    )
 
 
 if __name__ == "__main__":
