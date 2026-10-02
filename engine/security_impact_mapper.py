@@ -3,34 +3,69 @@ import json
 from pathlib import Path
 
 
-PROPERTY_RULES = {
-    "paymentservice": [
-        {
-            "property": "payment_transaction_integrity",
-            "reason": "Payment processing logic may affect transaction integrity.",
-        },
-        {
-            "property": "payment_authorization",
-            "reason": "Changes to payment-service behavior may affect authorization decisions.",
-        },
-        {
-            "property": "service_interaction_integrity",
-            "reason": "Dependent services may rely on payment-service responses.",
-        },
-    ],
-    "checkoutservice": [
-        {
-            "property": "checkout_transaction_integrity",
-            "reason": "Checkout changes may affect transaction consistency.",
-        }
-    ],
+# ---------------------------------------------------------
+# Known security mappings
+# These preserve the existing Online Boutique experiments.
+# ---------------------------------------------------------
+
+KNOWN_SEMANTIC_PROPERTY_MAP = {
+    "authorization_change":
+        "payment_authorization",
+
+    "transaction_change":
+        "payment_transaction_integrity",
 }
 
 
-SEMANTIC_PROPERTY_MAP = {
-    "authorization_change": "payment_authorization",
-    "transaction_change": "payment_transaction_integrity",
+# ---------------------------------------------------------
+# Generic security-property mapping
+# ---------------------------------------------------------
+
+GENERIC_SEMANTIC_PROPERTY_MAP = {
+    "authorization_change":
+        "authorization_integrity",
+
+    "authentication_change":
+        "authentication_integrity",
+
+    "transaction_change":
+        "transaction_integrity",
+
+    "service_call_change":
+        "service_interaction_integrity",
+
+    "interface_change":
+        "service_contract_integrity",
+
+    "state_change":
+        "state_integrity",
 }
+
+
+def generic_property_for_artifact(
+    artifact_type
+):
+    """
+    Assign a generic security property based
+    on the type of repository artifact changed.
+    """
+
+    if artifact_type == "interface_contract":
+        return "service_contract_integrity"
+
+    if artifact_type == "deployment":
+        return "deployment_security_integrity"
+
+    if artifact_type == "dependency_manifest":
+        return "dependency_integrity"
+
+    if artifact_type == "configuration":
+        return "configuration_security_integrity"
+
+    if artifact_type == "source_code":
+        return "source_security_integrity"
+
+    return None
 
 
 def map_security_impact(
@@ -41,8 +76,15 @@ def map_security_impact(
     impacts = []
 
     semantic_by_path = {
-        item["path"]: item.get("semantic_signals", [])
-        for item in semantics_report.get("analyses", [])
+        item.get("path"):
+            item.get(
+                "semantic_signals",
+                []
+            )
+        for item in semantics_report.get(
+            "analyses",
+            []
+        )
     }
 
     relationships = relationship_report.get(
@@ -50,229 +92,331 @@ def map_security_impact(
         []
     )
 
-    for change in change_report.get("changes", []):
-        service = change.get("service")
-        artifact = change.get("artifact_type")
-        path = change.get("path")
+    for change in change_report.get(
+        "changes",
+        []
+    ):
 
-        semantic_signals = semantic_by_path.get(path, [])
+        service = change.get(
+            "service",
+            "repository"
+        )
 
-        # ---------------------------------------------------------
-        # 1. Interface/API contract changes
-        # ---------------------------------------------------------
-        if artifact == "interface_contract":
+        path = change.get(
+            "path"
+        )
+
+        artifact = change.get(
+            "artifact_type",
+            "other"
+        )
+
+        semantic_signals = semantic_by_path.get(
+            path,
+            []
+        )
+
+
+        # -------------------------------------------------
+        # 1. Semantic security impacts
+        # -------------------------------------------------
+
+        for signal in semantic_signals:
+
+            semantic_domain = signal.get(
+                "semantic_domain"
+            )
+
+            # Preserve existing Online Boutique
+            # property names.
+            property_name = (
+                KNOWN_SEMANTIC_PROPERTY_MAP.get(
+                    semantic_domain
+                )
+            )
+
+            # Generic fallback for other repositories.
+            if not property_name:
+
+                property_name = (
+                    GENERIC_SEMANTIC_PROPERTY_MAP.get(
+                        semantic_domain
+                    )
+                )
+
+            if not property_name:
+                continue
+
             impacts.append({
-                "service": service,
-                "file": path,
-                "artifact_type": artifact,
-                "security_property": "service_contract_integrity",
-                "reason": (
-                    "A service interface contract changed; "
-                    "consumers may be affected by the modified API contract."
-                ),
-                "impact_source": "interface_change",
-                "verification_required": True,
+
+                "service":
+                    service,
+
+                "file":
+                    path,
+
+                "artifact_type":
+                    artifact,
+
+                "security_property":
+                    property_name,
+
+                "reason":
+                    (
+                        "Semantic analysis detected "
+                        f"{semantic_domain} in the "
+                        "changed repository artifact."
+                    ),
+
+                "impact_source":
+                    "semantic_analysis",
+
+                "verification_required":
+                    True,
             })
 
-        # ---------------------------------------------------------
-        # 2. Semantic security impact
-        # ---------------------------------------------------------
-        for signal in semantic_signals:
-            semantic_domain = signal.get("semantic_domain")
 
-            property_name = SEMANTIC_PROPERTY_MAP.get(
-                semantic_domain
+        # -------------------------------------------------
+        # 2. Artifact-level security impact
+        # -------------------------------------------------
+
+        artifact_property = (
+            generic_property_for_artifact(
+                artifact
             )
+        )
 
-            if property_name:
-                impacts.append({
-                    "service": service,
-                    "file": path,
-                    "artifact_type": artifact,
-                    "security_property": property_name,
-                    "reason": (
-                        f"Semantic analysis detected "
-                        f"{semantic_domain} in the changed artifact."
+        if artifact_property:
+
+            impacts.append({
+
+                "service":
+                    service,
+
+                "file":
+                    path,
+
+                "artifact_type":
+                    artifact,
+
+                "security_property":
+                    artifact_property,
+
+                "reason":
+                    (
+                        "A security-relevant repository "
+                        f"artifact of type '{artifact}' "
+                        "was changed."
                     ),
-                    "impact_source": "semantic_analysis",
-                    "verification_required": True,
-                })
 
-        # ---------------------------------------------------------
-        # 3. Service-specific security properties
-        # ---------------------------------------------------------
-        candidates = PROPERTY_RULES.get(service, [])
+                "impact_source":
+                    "artifact_analysis",
 
-        semantic_properties = {
-            SEMANTIC_PROPERTY_MAP.get(
-                signal.get("semantic_domain")
-            )
-            for signal in semantic_signals
-        }
+                "verification_required":
+                    True,
+            })
 
-        for candidate in candidates:
-            property_name = candidate["property"]
 
-            # Always preserve service interaction integrity.
-            if property_name == "service_interaction_integrity":
-                impacts.append({
-                    "service": service,
-                    "file": path,
-                    "artifact_type": artifact,
-                    "security_property": property_name,
-                    "reason": candidate["reason"],
-                    "impact_source": "service_change",
-                    "verification_required": True,
-                })
+        # -------------------------------------------------
+        # 3. Service relationship impact
+        # -------------------------------------------------
 
-            # Add service-specific properties only when the
-            # semantic analysis indicates that they are relevant.
-            elif property_name in semantic_properties:
-                impacts.append({
-                    "service": service,
-                    "file": path,
-                    "artifact_type": artifact,
-                    "security_property": property_name,
-                    "reason": candidate["reason"],
-                    "impact_source": "service_change",
-                    "verification_required": True,
-                })
-
-        # ---------------------------------------------------------
-        # 4. Relationship-based impact
-        # ---------------------------------------------------------
         for relationship in relationships:
+
+            source = relationship.get(
+                    "source_service"
+                )
+
+            target = relationship.get(
+                    "target_service"
+                )
+
             if (
-                relationship.get("source_service") == service
-                or relationship.get("target_service") == service
+                source == service
+                or target == service
             ):
+
                 impacts.append({
-                    "service": service,
-                    "file": path,
-                    "artifact_type": artifact,
-                    "security_property": "service_interaction_integrity",
-                    "reason": (
-                        f"Change is connected to "
-                        f"{relationship.get('source_service')} -> "
-                        f"{relationship.get('target_service')}."
-                    ),
-                    "impact_source": "relationship",
-                    "verification_required": True,
+
+                    "service":
+                        service,
+
+                    "file":
+                        path,
+
+                    "artifact_type":
+                        artifact,
+
+                    "security_property":
+                        "service_interaction_integrity",
+
+                    "reason":
+                        (
+                            "The changed service is connected "
+                            f"to the service relationship "
+                            f"{source} -> {target}."
+                        ),
+
+                    "impact_source":
+                        "relationship",
+
+                    "verification_required":
+                        True,
                 })
 
-    # -------------------------------------------------------------
-    # Remove duplicates
-    # -------------------------------------------------------------
+
+    # -----------------------------------------------------
+    # Remove duplicate impacts
+    # -----------------------------------------------------
+
     unique = {}
 
     for impact in impacts:
+
         key = (
-            impact["service"],
-            impact["security_property"],
-            impact["impact_source"],
+            impact.get("service"),
+            impact.get("file"),
+            impact.get(
+                "security_property"
+            ),
+            impact.get(
+                "impact_source"
+            ),
         )
 
         unique[key] = impact
 
-    return list(unique.values())
+
+    return list(
+        unique.values()
+    )
 
 
 def main():
+
     parser = argparse.ArgumentParser(
-        description="Repository-aware security impact mapper"
+        description=(
+            "Generic repository-aware "
+            "security impact mapper"
+        )
     )
 
     parser.add_argument(
         "--change-report",
-        default="output/change_report.json",
+        default=(
+            "output/change_report.json"
+        ),
     )
 
     parser.add_argument(
         "--relationship-report",
-        default="output/relationship_report.json",
+        default=(
+            "output/relationship_report.json"
+        ),
     )
 
     parser.add_argument(
         "--semantics-report",
-        default="output/change_semantics.json",
+        default=(
+            "output/change_semantics.json"
+        ),
     )
 
     parser.add_argument(
         "--output",
-        default="output/security_impact_report.json",
+        default=(
+            "output/security_impact_report.json"
+        ),
     )
 
     args = parser.parse_args()
 
-    # -------------------------------------------------------------
-    # Load change report
-    # -------------------------------------------------------------
+
     change_report = json.loads(
-        Path(args.change_report).read_text(
+        Path(
+            args.change_report
+        ).read_text(
             encoding="utf-8"
         )
     )
 
-    # -------------------------------------------------------------
-    # Load relationship report
-    # -------------------------------------------------------------
     relationship_report = json.loads(
-        Path(args.relationship_report).read_text(
+        Path(
+            args.relationship_report
+        ).read_text(
             encoding="utf-8"
         )
     )
 
-    # -------------------------------------------------------------
-    # Load semantic analysis report
-    # -------------------------------------------------------------
     semantics_report = json.loads(
-        Path(args.semantics_report).read_text(
+        Path(
+            args.semantics_report
+        ).read_text(
             encoding="utf-8"
         )
     )
 
-    # -------------------------------------------------------------
-    # Map security impact
-    # -------------------------------------------------------------
+
     impacts = map_security_impact(
         change_report,
         relationship_report,
         semantics_report,
     )
 
+
     result = {
-        "engine": "security-impact-mapper",
-        "version": "1.2",
-        "security_impacts": impacts,
-        "total_impacts": len(impacts),
+
+        "engine":
+            "security-impact-mapper",
+
+        "version":
+            "2.0",
+
+        "mode":
+            "repository-generic",
+
+        "security_impacts":
+            impacts,
+
+        "total_impacts":
+            len(impacts),
     }
 
-    # -------------------------------------------------------------
-    # Write output
-    # -------------------------------------------------------------
-    output = Path(args.output)
+
+    output = Path(
+        args.output
+    )
 
     output.parent.mkdir(
         parents=True,
-        exist_ok=True,
+        exist_ok=True
     )
+
 
     output.write_text(
         json.dumps(
             result,
-            indent=2,
+            indent=2
         ),
-        encoding="utf-8",
+        encoding="utf-8"
     )
+
 
     print(
         json.dumps(
             {
-                "status": "success",
-                "security_impacts": len(impacts),
-                "output": str(output.resolve()),
+                "status":
+                    "success",
+
+                "security_impacts":
+                    len(impacts),
+
+                "output":
+                    str(
+                        output.resolve()
+                    ),
             },
-            indent=2,
+            indent=2
         )
     )
 
