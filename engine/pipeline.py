@@ -62,6 +62,7 @@ def main():
         "--repo", args.repo,
         "--base", args.base,
         "--head", args.head,
+        "--change-report", str(change_report),
         "--output", str(semantics_report)
     ])
 
