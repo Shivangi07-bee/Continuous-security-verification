@@ -5,9 +5,7 @@ on:
 
 jobs:
   security-verification:
-
     name: Repository Security Verification
-
     runs-on: ubuntu-latest
 
     permissions:
@@ -15,29 +13,15 @@ jobs:
 
     steps:
 
-      # --------------------------------------------------
-      # 1. Checkout the repository that called this workflow
-      # --------------------------------------------------
-
       - name: Checkout target repository
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-
-      # --------------------------------------------------
-      # 2. Setup Python
-      # --------------------------------------------------
-
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.13"
-
-
-      # --------------------------------------------------
-      # 3. Checkout our verification framework
-      # --------------------------------------------------
 
       - name: Checkout security verification framework
         uses: actions/checkout@v5
@@ -46,30 +30,26 @@ jobs:
           ref: main
           path: security-verification-framework
 
-
-      # --------------------------------------------------
-      # 4. Identify repository evolution
-      # --------------------------------------------------
-
       - name: Determine commits
         id: commits
         shell: bash
         run: |
-
           CURRENT_COMMIT="${GITHUB_SHA}"
 
           if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
-
             BASE_COMMIT="${{ github.event.pull_request.base.sha }}"
 
-          elif [ "${GITHUB_EVENT_BEFORE}" != "0000000000000000000000000000000000000000" ]; then
-
+          elif [ "${GITHUB_EVENT_NAME}" = "push" ] && \
+               [ -n "${GITHUB_EVENT_BEFORE}" ] && \
+               [ "${GITHUB_EVENT_BEFORE}" != "0000000000000000000000000000000000000000" ]; then
             BASE_COMMIT="${GITHUB_EVENT_BEFORE}"
 
+          elif [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ] && \
+               git rev-parse HEAD~1 >/dev/null 2>&1; then
+            BASE_COMMIT="$(git rev-parse HEAD~1)"
+
           else
-
             BASE_COMMIT="$(git rev-list --max-parents=0 HEAD)"
-
           fi
 
           echo "base=${BASE_COMMIT}" >> "$GITHUB_OUTPUT"
@@ -78,36 +58,23 @@ jobs:
           echo "BASE: ${BASE_COMMIT}"
           echo "HEAD: ${CURRENT_COMMIT}"
 
-
-      # --------------------------------------------------
-      # 5. Run our complete verification pipeline
-      # --------------------------------------------------
-
       - name: Run continuous security verification
         shell: bash
         run: |
-
           python security-verification-framework/engine/pipeline.py \
             --repo "${GITHUB_WORKSPACE}" \
             --base "${{ steps.commits.outputs.base }}" \
             --head "${{ steps.commits.outputs.head }}"
 
-
-      # --------------------------------------------------
-      # 6. Display verification result
-      # --------------------------------------------------
-
-- name: Display security result
-   shell: bash
-   run: |
-
+      - name: Display security result
+        shell: bash
+        run: |
           echo ""
           echo "=============================================="
           echo "CONTINUOUS SECURITY VERIFICATION RESULT"
           echo "=============================================="
 
           python - <<'PY'
-
           import json
           from pathlib import Path
 
@@ -120,35 +87,19 @@ jobs:
               raise SystemExit(1)
 
           report = json.loads(
-              path.read_text(
-                  encoding="utf-8"
-              )
+              path.read_text(encoding="utf-8")
           )
 
-          print(
-              f"Total checks : {report.get('total_checks', 0)}"
-          )
-
-          print(
-              f"PASS         : {report.get('passed', 0)}"
-          )
-
-          print(
-              f"FAIL         : {report.get('failed', 0)}"
-          )
-
-          print(
-              f"REVIEW       : {report.get('review_required', 0)}"
-          )
-
+          print(f"Total checks : {report.get('total_checks', 0)}")
+          print(f"PASS         : {report.get('passed', 0)}")
+          print(f"FAIL         : {report.get('failed', 0)}")
+          print(f"REVIEW       : {report.get('review_required', 0)}")
           PY
 
-- name: Enforce security gate
-   shell: bash
-   run: |
-
-    python - <<'PY'
-
+      - name: Enforce security gate
+        shell: bash
+        run: |
+          python - <<'PY'
           import json
           from pathlib import Path
 
@@ -157,9 +108,7 @@ jobs:
           )
 
           report = json.loads(
-              path.read_text(
-                  encoding="utf-8"
-              )
+              path.read_text(encoding="utf-8")
           )
 
           failed = report.get("failed", 0)
@@ -171,19 +120,11 @@ jobs:
               raise SystemExit(1)
 
           print("SECURITY GATE: PASSED")
-
           PY
 
-
-      # --------------------------------------------------
-      # 7. Preserve reports as CI artifacts
-      # --------------------------------------------------
-
-- name: Upload verification reports
-   uses: actions/upload-artifact@v5
-   with:
-
+      - name: Upload verification reports
+        uses: actions/upload-artifact@v5
+        with:
           name: security-verification-reports
-
           path: |
             security-verification-framework/output/*.json
