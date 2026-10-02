@@ -143,7 +143,7 @@ jobs:
 
           PY
 
- - name: Enforce security gate
+- name: Enforce security gate
    shell: bash
    run: |
 
@@ -179,9 +179,9 @@ jobs:
       # 7. Preserve reports as CI artifacts
       # --------------------------------------------------
 
-      - name: Upload verification reports
-        uses: actions/upload-artifact@v5
-        with:
+- name: Upload verification reports
+   uses: actions/upload-artifact@v5
+   with:
 
           name: security-verification-reports
 
