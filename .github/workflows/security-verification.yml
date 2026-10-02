@@ -97,9 +97,9 @@ jobs:
       # 6. Display verification result
       # --------------------------------------------------
 
-      - name: Display security result
-        shell: bash
-        run: |
+- name: Display security result
+   shell: bash
+   run: |
 
           echo ""
           echo "=============================================="
@@ -143,11 +143,11 @@ jobs:
 
           PY
 
-        - name: Enforce security gate
-          shell: bash
-          run: |
+ - name: Enforce security gate
+   shell: bash
+   run: |
 
-            python - <<'PY'
+    python - <<'PY'
 
           import json
           from pathlib import Path
