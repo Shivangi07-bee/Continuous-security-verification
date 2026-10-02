@@ -143,11 +143,11 @@ jobs:
 
           PY
 
-                - name: Enforce security gate
-        shell: bash
-        run: |
+        - name: Enforce security gate
+          shell: bash
+          run: |
 
-          python - <<'PY'
+            python - <<'PY'
 
           import json
           from pathlib import Path
