@@ -1,1 +1,1 @@
-Resolved merge conflict for Git Lab 2.
+Resolved merge conflict for Git Lab 2.GitHub collaboration workflow demonstrated through a pull request.
