@@ -11,6 +11,8 @@ permissions:
 
 jobs:
   publish:
+    env:
+        IMAGE_OWNER: ${{ github.repository_owner }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,12 +24,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
+      - name: Set lowercase image name
+        run: echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/shopeasy-lite" >> "$GITHUB_ENV"
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
           context: ./shopeasy-lite
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/shopeasy-lite:latest
-            ghcr.io/${{ github.repository_owner }}/shopeasy-lite:v1
+           ${{ env.IMAGE_NAME }}:latest
+           ${{ env.IMAGE_NAME }}:v1
