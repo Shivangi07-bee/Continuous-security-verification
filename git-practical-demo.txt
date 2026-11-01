@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 This change was made on the main branch.
+=======
+This change was made on the feature branch.
+>>>>>>> feature/lab2-conflict
