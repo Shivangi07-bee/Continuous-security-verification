@@ -1,0 +1,41 @@
+name: Web Application CI
+
+on:
+  push:
+    branches: [main, '**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    name: CI - Node ${{ matrix.node-version }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [22, 24]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Check JavaScript syntax
+        run: node --check web/app.js
+
+      - name: Run tests
+        run: node --test web/app.test.js
+
+      - name: Package web application
+        run: tar -czf web-app.tar.gz web/
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-app-node-${{ matrix.node-version }}
+          path: web-app.tar.gz
